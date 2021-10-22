@@ -1,0 +1,49 @@
+---
+#- name: "Ensure /var/www/{{ hosts_group }}/{{ proj_name }} directory has correct permissions."
+  #become: yes
+  #become_user: www-data
+  #  file:
+  #    path: "/var/www/{{ hosts_group }}/{{ proj_name }}"
+  #    state: directory
+  #    owner: www-data
+  #    group: www-data
+
+- name: Ensure .ssh directory exists.
+  file:
+    path: /var/www/.ssh
+    state: directory
+    mode: 0700
+    owner: "{{ server.user.group }}"
+    group: www-data
+
+- name: Ensure GitHub deploy key is present on the server.
+  copy:
+    src: "{{ deploy_private_key }}"
+    dest: /var/www/.ssh/deploy_key
+    mode: 0600
+    owner: "{{ server.user.group }}"
+    group: www-data
+
+- name: Clone the code repository to the docroot.
+  become: yes
+  become_user: "{{ server.user.username }}" 
+  git:
+    repo: "{{ git_repo }}"
+    version: "{{ item.branch | default('master') }}"
+    dest: "/var/www/{{ item.name }}/{{ item.dir }}"
+    accept_hostkey: yes
+    force: yes
+    key_file: /var/www/.ssh/deploy_key 
+  with_items:
+      - { name : "{{ hosts_group }}", branch: "master", dir: "{{ proj_name }}" }
+
+- name: "Ensure /var/www/{{ hosts_group }}/{{ proj_name }} directory has correct permissions."
+  file:
+    path: /var/www/{{ item.name }}/{{ item.dir }}
+    state: directory
+    recurse: yes
+    #mode: 0777
+    owner: "{{ server.user.group }}"
+    #group: "{{ server.user.group }}"
+  with_items:
+      - { name : "{{ hosts_group }}", dir: "{{ proj_name }}" }       

@@ -1,0 +1,40 @@
+---
+#
+# vsftpd_users:
+#   - username: ftpuser
+#     name: FTP User
+#     state: present (default) or absent
+#     remove: yes or no (default)
+#     comment: FTP User for file transfer
+#     uid: 13370
+#     home: /path/to/home
+#     password: "{{ 'ftpuser' | password_hash('sha256', 'mysecretsalt') }}"
+# vsftpd_config:
+#   local_umask: 022
+# vsftpd_seboolean:
+#    ftp_home_dir: yes
+#    ftpd_full_access: no
+#
+
+# define package (version)
+vsftpd_package: vsftpd  
+# users to create with nologin
+vsftpd_users: []
+# user group to create with nologin
+vsftpd_group: ftp
+# start on boot
+vsftpd_service_enabled: yes
+# current state: started, stopped
+vsftpd_service_state: started
+# enable ssl by default
+vsftpd_enable_ssl: true
+# default ssl key
+vsftpd_key_file: /etc/ssl/certs/ssl-cert-snakeoil.pem
+# default ssl cert
+vsftpd_cert_file: /etc/ssl/private/ssl-cert-snakeoil.key
+# config variables
+vsftpd_config: {}
+# config template to install, relative to the ansible repository root
+vsftpd_config_template:
+# optional SELinux booleans to be set i.e. for RedHat
+vsftpd_seboolean: {}

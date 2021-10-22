@@ -1,0 +1,41 @@
+---
+project_title: terminal
+server_hostname: "{{ ansible_ssh_host }}"
+
+server:
+    user:
+        username: www
+        password: www
+        group: www
+        action: create_user
+        admin: no
+        groups:
+          - www
+          - www-data
+    settings:
+        venv_home: "/home/www/.envs"
+        git_repo: git@github.com:DmitriyGrigoriev/terminal.git
+    project:
+        proj_name: "{{ project_title }}"
+        reqs_path: requirements/development_requirements.txt
+    postgre:
+        db: "{{ project_title }}"
+        username: dbms
+        database_host: "{{ server_hostname }}"
+        database_port: 5432
+    ssh:
+        ssh_port: 22
+        github_key: ~/.ssh/id_rsa
+        ansible_key: ~/.ssh/ansible.pub
+
+ftp:
+    username: ftpuser
+    password: ftpdev
+
+# Default Postgre database will create first time
+#postgre:
+    #    db: dbms_db
+    #    username: dbms
+    #    password: development
+    #    database_host: localhost
+    #    database_port: 5432   

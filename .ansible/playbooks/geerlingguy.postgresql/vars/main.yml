@@ -1,0 +1,18 @@
+postgresql_python_library: python3-psycopg2
+
+# Databases to ensure exist.
+postgresql_databases:
+  - name: "{{ server.postgre.db }}" # required; the rest are optional
+    lc_collate: 'ru_RU.UTF-8' # defaults to 'en_US.UTF-8'
+    lc_ctype: 'ru_RU.UTF-8' # defaults to 'en_US.UTF-8'
+
+# Debian only. Used to generate the locales used by PostgreSQL databases.
+postgresql_locales:
+  - 'ru_RU.UTF-8'
+
+# Users to ensure exist.
+postgresql_users:
+  - name: "{{ server.postgre.username }}"  #required; the rest are optional
+    password: "{{ db_pass }}"  # defaults to not set
+
+postgres_users_no_log: false

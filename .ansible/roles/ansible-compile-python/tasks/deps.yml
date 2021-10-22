@@ -1,0 +1,90 @@
+---
+
+- name: Update APT sources
+  become: true
+  apt:
+    update_cache=no
+    #update_cache=yes
+
+- name: Python deps | Install compile time depdendencies
+  become: true
+  apt:
+    state: present
+    name:
+      - build-essential #
+      - libnss3-dev #
+        #- cur #
+      - autotools-dev
+      - blt-dev
+      - bzip2
+      - dpkg-dev
+      - g++-multilib
+      - gcc-multilib
+      - libbluetooth-dev
+      - libbz2-dev
+      - libexpat1-dev
+      - libffi-dev #
+      - libffi6
+      - libffi6-dbg
+      - libgdbm-dev #
+      - libgpm2
+      - libncursesw5-dev #
+      - libreadline-dev #
+      - libsqlite3-dev #
+      - libssl-dev #
+      - libtinfo-dev
+      - libjpeg62-turbo-dev
+      - mime-support
+      - net-tools
+      - netbase
+      - quilt
+      - tk-dev
+      - zlib1g-dev
+        #- python3-dev
+        #- python3-virtualenv
+        #- python3-psycopg2  
+      - python-psycopg2
+      - python-setuptools  
+
+
+- name: Python 3.6 deps | Install compile time dependencies
+  become: true
+  apt:
+    state: present
+    name:
+      - liblzma-dev
+  when: python_36
+
+##
+# Pillow
+##
+
+- name: Pillow deps | Install compile time depdendencies
+  become: true
+  apt:
+    state: present
+    name:
+      - cmake
+      - libfreetype6-dev
+      - libjpeg62-turbo-dev
+      - liblcms2-dev
+      - libtiff5-dev
+      - libwebp-dev
+      - tcl8.6-dev
+      - tk8.6-dev
+  when: pillow
+
+##
+# lxml
+##
+
+- name: lxml deps | Install compile time dependencies
+  become: true
+  apt:
+    state: present
+    name:
+      - libxml2
+      - libxml2-dev
+      - libxslt1.1
+      - libxslt1-dev
+  when: lxml

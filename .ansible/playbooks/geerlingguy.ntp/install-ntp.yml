@@ -1,0 +1,9 @@
+---
+- hosts: "{{ hosts_group }}"
+  become: yes
+  vars_files:
+      - ../../vault/confidential-data.yml 
+      - vars/main.yml  
+
+  roles:
+    - ../../roles/geerlingguy.ntp

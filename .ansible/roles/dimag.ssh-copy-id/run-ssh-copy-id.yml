@@ -1,0 +1,8 @@
+---
+- name: Deploy Ansible SSH public key
+  hosts: "{{ hosts_group }}"
+  become: true
+  vars_files:
+      - ../../vault/confidential-data.yml
+  roles:
+    - role: dimag.ssh-copy-id

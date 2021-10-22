@@ -1,0 +1,10 @@
+---
+- name: Create Python virtualenv and deploy project
+  hosts: "{{ hosts_group }}"
+  become: true  
+  vars_files:
+      - ../../vault/confidential-data.yml
+      - ../ansible-compile-python/defaults/main.yml        
+  roles:
+      - dimag.virtualenv
+

@@ -1,0 +1,43 @@
+---
+
+apt_cache_valid_time: 3600
+apt_update: true
+
+apt_upgrade: true
+apt_upgrade_type: safe          # safe, full or dist
+
+apt_dependencies: []
+    #- aptitude
+
+apt_install:
+    - mc
+    - python-apt
+    - python-paramiko  
+    - vim
+    - mosh    
+    - tmux
+    - htop
+    - git
+    - curl
+    - wget
+    - unzip
+    - zip
+    - gcc
+    - build-essential
+    - make
+    - zsh
+    - tree
+    - libc6-dev
+    - libpq-dev  
+
+# https://www.debian.org/releases/stable/errata.ru.html
+install_repositories: false
+apt_install_repositories:
+    - deb http://security.debian.org/debian-security buster/updates main contrib non-free
+remove_repositories: false
+apt_remove_repositories:
+    - deb http://security.debian.org/debian-security buster/updates main
+
+apt_remove: []
+#    - vim
+#   - unattended-upgrades

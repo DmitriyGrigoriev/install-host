@@ -1,0 +1,20 @@
+# django
+# user: "{{ ansible_user }}"
+domains:
+    - "{{ server_hostname }}.xip.io"
+    - "www.{{ server_hostname }}.xip.io"
+database_host: "{{ server.postgre.database_host }}"
+database_port: "{{ server.postgre.database_port}}"
+venv_home: "{{ server.settings.venv_home }}"
+proj_name: "{{ server.project.proj_name }}"
+venv_path: "{{ venv_home }}/{{ proj_name }}"
+proj_path: "/var/www/{{ hosts_group }}/{{ proj_name }}"
+settings_path: "{{ proj_path }}/config"
+reqs_path: "{{ server.project.reqs_path }}"
+conf_path: /etc/nginx/conf
+python: "{{ venv_path }}/bin/python3.8"
+manage: "{{ python }} {{ proj_path }}/manage.py"
+num_workers: "multiprocessing.cpu_count() * 2 + 1"
+gunicorn_procname: gunicorn_mezzanine
+deploy_private_key: "{{ server.ssh.github_key }}"
+git_repo: "{{ server.settings.git_repo }}"

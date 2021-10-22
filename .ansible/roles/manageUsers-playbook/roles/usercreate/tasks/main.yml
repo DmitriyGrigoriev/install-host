@@ -1,0 +1,35 @@
+---
+
+#- name: Generate passwords
+#  shell: python -c 'import crypt; print crypt.crypt("{{ upassword }}", "$6$random_salt")'
+#  register: genpass
+- name: Creating required groups
+  group:
+    name: "{{ item }}"
+    state: present  
+  loop:
+    "{{ ugroups }}" 
+
+- name: Creating user "{{ uusername }}" with admin access
+  user: 
+    name: "{{ uusername }}"
+    password: "{{ upassword |password_hash('sha512') }}" 
+    group: "{{ ugroup | default('adm') }}"
+    groups: "{{ ugroups }}"
+    shell: /bin/bash
+    append: yes
+  when: assigned_role  == True
+
+- name: Creating users "{{ uusername }}" without admin access
+  user: 
+    name: "{{ uusername }}" 
+    password: "{{ upassword |password_hash('sha512') }}"
+    group: "{{ ugroup | default(omit) }}"
+    groups: "{{ ugroups }}"
+    shell: /bin/bash
+    state: present
+    append: yes
+  when: assigned_role == False
+ 
+#- name: Expiring password for user "{{ uusername }}"
+#  shell: chage -d 0 "{{ uusername }}"

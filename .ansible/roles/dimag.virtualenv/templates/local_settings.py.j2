@@ -1,0 +1,73 @@
+from config.common_settings import *
+
+DEBUG = True
+CRISPY_FAIL_SILENTLY = not DEBUG
+
+SECRET_KEY = "{{ secret_key}}"
+
+MIDDLEWARE += [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+ALLOWED_HOSTS += [
+    {% for domain in domains %}"{{ domain }}",{% endfor %}
+]
+INTERNAL_IPS = [
+    {% for domain in domains %}"{{ domain }}",{% endfor %}
+]
+#
+INSTALLED_APPS += [
+    'debug_toolbar',
+]
+DATABASES['default'].update({
+    "ENGINE": "django.db.backends.postgresql",
+    "NAME": "{{ proj_name }}",
+    "USER": "{{ proj_name }}",
+    "PASSWORD": "{{ db_pass }}",
+    "HOST": "{{ database_host | default('localhost') }}",
+    "PORT": "{{ database_port | default(5432) }}",
+})
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'default-locmemcache',
+        'TIMEOUT': 5,
+    }
+}
+
+# Account django-broker-redux properties
+REGISTRATION_USE_SITE_EMAIL = True
+# Required if REGISTRATION_USE_SITE_EMAIL is set.
+# Determines the user that emails are sent by.
+# For example, if this is set to admin emails will be sent
+# from admin@<your-site-domain.com>
+REGISTRATION_SITE_USER_EMAIL = "exchange"
+REGISTRATION_ADMINS = [('Администратор', 'dimag@ntbroker.ru'), ]
+
+ACCOUNT_ACTIVATION_DAYS = 2 # кол-во дней для хранения кода активации
+# для отправки кода активации
+AUTH_USER_EMAIL_UNIQUE = True
+# Email settings
+EMAIL_HOST = 'mx1.ntbroker.ru'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "exchange@ntbroker.ru"
+EMAIL_HOST_PASSWORD = "Ex180518"
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'info@google.ru'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Django Debug Toolbar
+def show_toolbar(request):
+
+    return False
+
+    if not request.is_ajax() \
+            and request.user \
+            and request.user.is_authenticated \
+            and request.user.email == "dimag@inbox.ru":
+        return True
+    return False
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': 'config.dev_settings.show_toolbar'
+}

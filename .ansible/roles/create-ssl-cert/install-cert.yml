@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  roles:
+     - { 
+            role: create-ssl-cert, 
+      }
+  vars:
+  #- dnsname: your.dns.name
+  - tmppath: "~/.ssl/"
+  - crtpath: "{{ tmppath }}{{ dnsname }}.crt"
+  - pempath: "{{ tmppath }}{{ dnsname }}.pem"
+  - csrpath: "{{ tmppath }}{{ dnsname }}.csr"
+  - pfxpath: "{{ tmppath }}{{ dnsname }}.pfx"
+    #- private_key_password: "password"
+

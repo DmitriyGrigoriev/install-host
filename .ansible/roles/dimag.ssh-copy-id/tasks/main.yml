@@ -1,0 +1,16 @@
+---
+- name: Ensure user .ssh directory exists.
+  file:
+    path: "/home/{{ server.user.username }}/.ssh"
+    state: directory
+    mode: 0700
+    owner: "{{ server.user.group }}"
+    group: "{{ server.user.group }}"
+
+- name: Ensure Ansible deploy key is present on the server.
+  copy:
+    src: "{{ ansible_key }}"
+    dest: "/home/{{ server.user.username }}/.ssh/ansible.pub"
+    mode: 0600
+    owner: "{{ server.user.group }}"
+    group: "{{ server.user.group }}"

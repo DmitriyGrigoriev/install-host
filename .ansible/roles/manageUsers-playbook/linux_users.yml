@@ -1,0 +1,49 @@
+# https://thinkingmonster.wordpress.com/it-automation/386-2/ansible-roles/
+#
+#Using Playbook
+# Adding admin user:-
+#
+# ansible-playbook site.yml –e “username=popat password=akash admin=yes action=create_user”
+#
+# Adding normal user:-#
+# ansible-playbook site.yml -e "username=www password=wwwDiGGma54 admin=no \
+#               action=create_user" --vault-password-file=vault.txt -i ~/.hosts
+#
+# Removing user:-#
+# ansible-playbook site.yml -e "username=www action=delete_user" \
+#               --vault-password-file=vault.txt -i ~/.hosts
+---
+- hosts: staging
+  remote_user: ansible
+  become: yes
+  gather_facts: yes
+
+  vars:
+     user_name: "{{ web.username }}"
+     user_password: "{{ web.password }}"
+     is_admin: "{{ web.admin }}"
+  
+  vars_files:
+      - ~/sudopass
+    
+  roles:
+      - { 
+            role: usercreate, 
+            upassword: "{{ user_password }}", 
+            uusername: "{{ user_name }}", 
+            assigned_role: "{{ is_admin }}", 
+            when: action == "create_user" 
+        }
+      - { 
+            role: userdel, 
+            uusername: "{{ user_name }}", 
+            when: action == "delete_user" 
+        }  
+  
+  tasks:
+      - debug: var=web
+      - debug: msg="Run action {{ action }} username is '{{ username }}' admin={{ admin }}" 
+        when: action == "create_user"
+      - debug: msg="Run action '{{ action }}'"
+        when: action == "delete_user"
+        

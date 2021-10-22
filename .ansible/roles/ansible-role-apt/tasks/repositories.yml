@@ -1,0 +1,24 @@
+---
+- name: Install required python-apt package
+  apt:
+    state: present
+    update_cache: no
+    name:
+      - python-apt
+
+- name: Remove repositories.
+  apt_repository:
+      repo: "{{ item }}"
+      state: absent
+      update_cache: no
+  with_items: "{{ apt_remove_repositories }}"
+  when: remove_repositories
+  
+- name: Install repositories.
+  apt_repository:
+      repo: "{{ item }}"
+      update_cache: no
+  with_items: "{{ apt_install_repositories }}"
+  when: install_repositories
+
+

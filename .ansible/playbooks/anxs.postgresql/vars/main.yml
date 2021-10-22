@@ -1,0 +1,34 @@
+postgresql_locale_parts:
+  - "ru_RU" # Locale
+  - "UTF-8" # Encoding
+postgresql_ctype_parts:
+  - "ru_RU" # Locale
+  - "UTF-8" # Encoding
+
+postgresql_port: "{{ server.postgre.database_port }}"
+postgresql_max_connections: 300
+
+# List of users to be created (optional)
+postgresql_users:
+  - name: "{{ server.postgre.username }}"
+    pass: "{{ db_pass }}"
+    encrypted: yes 
+
+postgresql_databases:
+  - name: "{{ server.postgre.db }}"
+    owner: "{{ server.postgre.username }}"
+
+# List of schemas to be created (optional)
+#postgresql_database_schemas:
+#  - database: "{{ server.postgre.db }}"           # database name
+#    schema: public                                # schema name
+#    state: present
+
+# List of user privileges to be applied (optional)
+postgresql_user_privileges:
+  - name: "{{ server.postgre.username }}"         # user name
+    db: "{{ server.postgre.db }}"                 # database
+    priv: "ALL"                 # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
+    role_attr_flags: "CREATEDB" # role attribute flags
+
+

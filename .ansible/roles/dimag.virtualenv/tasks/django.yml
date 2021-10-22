@@ -1,0 +1,37 @@
+---
+- name: "{{ proj_name }} | Install required OS dependencies"
+  become: true
+  apt:
+    state: present
+    name:
+      - libcairo2-dev
+   # You had to installed on remote host:
+   # apt-get install python-setuptools
+   # ttps://github.com/ansible/ansible/issues/47361
+
+- name: "{{ proj_name }} | Install requirments Django packages"
+  pip:
+   requirements:  "{{ proj_path }}/{{ reqs_path }}"
+   virtualenv: "{{ venv_home }}"
+
+- name: Generate the settings file
+  template: 
+    src: local_settings.py.j2 
+    dest: "{{ settings_path }}/dev_settings.py"
+    owner: "{{ server.user.group }}"
+    group: "{{ server.user.group }}"
+
+- name: Make executable
+  file:
+    path: "{{ proj_path }}/manage.py"
+    mode: 0777
+    
+- name: Apply migrations to create the database, collect static content
+  django_manage:
+    command: "{{ item }}"
+    app_path: "{{ proj_path }}"
+    virtualenv: "{{ venv_home }}"
+  with_items:
+    - migrate
+      #- collectstatic
+

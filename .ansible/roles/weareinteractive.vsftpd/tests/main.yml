@@ -1,0 +1,18 @@
+---
+
+- hosts: all
+  roles:
+    - weareinteractive.vsftpd
+  vars:
+    vsftpd_users:
+       - username: ftpuser
+         name: FTP User
+         password: "{{ 'ftpuser' | password_hash('sha256', 'mysecretsalt') }}"
+    vsftpd_config:
+      listen_port: 990
+      local_enable: YES
+      write_enable: YES
+      chroot_local_user: YES
+      xferlog_enable: YES
+      log_ftp_protocol: YES
+      allow_writeable_chroot: YES

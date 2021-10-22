@@ -1,0 +1,11 @@
+---
+- hosts: "{{ hosts_group }}"
+  vars_files:
+      - ../../vault/confidential-data.yml
+  
+  roles:
+      - ansible-compile-python  
+  vars:
+    - python_38: true
+    - pillow: true
+    - lxml: true

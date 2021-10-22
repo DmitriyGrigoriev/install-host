@@ -1,0 +1,11 @@
+# Don't set gather_facts to no, apt need to get packages infornmation
+---
+
+- name: Install dependencies.
+  apt: 
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages: "{{ apt_dependencies }}"
+    when: apt_dependencies
+  tags: apt

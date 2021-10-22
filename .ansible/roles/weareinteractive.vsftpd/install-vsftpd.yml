@@ -1,0 +1,26 @@
+---
+
+- hosts: "{{ hosts_group }}"
+  become: yes
+  roles:
+      - weareinteractive.vsftpd
+  vars_files:
+      - ../../vault/confidential-data.yml
+
+  vars:
+    vsftpd_users:
+    - username: "{{ ftp.username }}"
+      password: "{{ ftp.password | password_hash('sha512') }}"
+      name: FTP User
+      #state: present (default) or absent
+      #remove: yes or no (default)
+      comment: FTP User for file transfer
+
+    vsftpd_config:
+        listen_port: 990
+        local_enable: YES
+        write_enable: YES
+        chroot_local_user: YES
+        xferlog_enable: YES
+        log_ftp_protocol: YES
+        allow_writeable_chroot: YES

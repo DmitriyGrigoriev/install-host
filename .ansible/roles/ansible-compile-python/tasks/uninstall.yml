@@ -1,0 +1,10 @@
+- name: Python deps | UnInstall Python3.7
+  become: true
+  apt:
+    autoremove: yes
+    purge: yes
+    state: absent
+    name:
+      - python3.7
+      - python3
+

@@ -1,0 +1,2 @@
+---
+ansible_key: '{{ server.ssh.ansible_key }}'

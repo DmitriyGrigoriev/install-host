@@ -1,0 +1,13 @@
+---
+- name: configure passwordless ssh authentication on a remote machine
+  hosts: "{{ hosts_group }}"
+
+  roles:
+     - {
+         role: rywillia.ssh-copy-id,
+         hostname: 127.0.0.1,
+         username: "{{ server.user.username }}",
+         password: "{{ server.user.password }}",
+         ssh_public_key: "{{ server.ssh.ansible_key }}",
+         ssh_port: "{{ server.ssh.ssh_port | default(22) }}",
+       }

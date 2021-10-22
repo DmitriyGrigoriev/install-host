@@ -1,0 +1,24 @@
+---
+galaxy_info:
+  author: James Pic
+  description: |
+    Ansible role to setup an ssh agent.
+  company: PeopleDoc
+  license: BSD
+  min_ansible_version: 2.0
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - all
+  - name: Arch
+    versions:
+    - all
+
+  categories:
+  - networking
+  - system
+
+dependencies: []

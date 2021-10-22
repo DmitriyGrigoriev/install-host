@@ -1,0 +1,4 @@
+---
+- include: venv_py38.yml py_data={{ py38 }} venv_data={{ venv38 }} should_install={{ python_38 }}
+- include: github.yml
+- include: django.yml

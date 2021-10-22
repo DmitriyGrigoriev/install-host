@@ -1,0 +1,37 @@
+*.retry
+*/__pycache__
+*.pyc
+.ansible/tmp
+
+# Ansible runtime and backups
+*.original
+*.tmp
+*.bkp
+*.retry
+*.*~
+
+# Try tyo avoid any plain-text passwords
+*pwd*
+*pass*
+*password*
+*.txt
+
+# Exclude all binaries
+*.bin
+*.jar
+*.tar
+*.zip
+*.gzip
+*.tgz
+
+# SSH Key
+.ssh
+.ansible/.ssh
+.ansible/.ssl
+
+# ansible-vault key
+.ansible/vault/vault.key
+
+# Editor directories and files
+.idea
+.vscode

@@ -1,0 +1,49 @@
+---
+
+- name: Ensure SSH home dir exists
+  file:
+    path: '{{ ssh_home }}'
+    owner: '{{ owner }}'
+    mode: 0700
+
+- name: Ensure SSH config exists
+  file:
+    path: '{{ ssh_home }}/config'
+    state: touch
+    owner: '{{ owner }}'
+    mode: 0700
+  changed_when: false
+
+- name: Ensure there is a public key
+  shell: ssh-keygen -f {{ ssh_private_key }} -N ''
+  args:
+    creates: '{{ ssh_private_key }}'
+
+- name: Ensure the keys have restricted permissions
+  file:
+    path: '{{ item }}'
+    owner: '{{ owner }}'
+    mode: 0600
+  with_items:
+  - '{{ ssh_private_key }}'
+  - '{{ ssh_public_key }}'
+
+# Just for debugging.
+- name: enable ssh-agent
+  shell: echo "ssh-agent = $(ssh-agent)"
+  when: '"SSH_AUTH_SOCK" in ansible_env'
+
+- name: enable ssh-agent
+  shell: eval $(ssh-agent)
+  when: '"SSH_AUTH_SOCK" in ansible_env'
+
+- name: Ensure SSH to containers is permissive
+  blockinfile:
+    dest: '{{ ssh_home }}/config'
+    block: |
+      Host {{ item }}
+          # No need for security for disposable test containers
+          UserKnownHostsFile /dev/null
+          StrictHostKeyChecking no
+          User root
+  with_items: '{{ ssh_insecure }}'

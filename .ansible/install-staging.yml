@@ -1,0 +1,12 @@
+- import_playbook: playbooks/geerlingguy.ntp/install-ntp.yml
+  ####- import_playbook: roles/dimag.apt-repository/install-apt-repository.yml 
+- import_playbook: roles/ansible-role-apt/install-required-packages.yml 
+- import_playbook: roles/manageUsers-playbook/create-linux-users.yml 
+- import_playbook: roles/dimag.ssh-copy-id/run-ssh-copy-id.yml
+  ####- import_playbook: roles/geerlingguy.pip/install-python-pip.yml#
+  ####- import_playbook: roles/ansible-ssh-agent/install-ssh-agent.yml
+- import_playbook: roles/ansible-compile-python/install-python.yml
+- import_playbook: playbooks/anxs.postgresql/install-postgree.yml
+- import_playbook: roles/dimag.virtualenv/install-python-env.yml 
+- import_playbook: roles/weareinteractive.vsftpd/install-vsftpd.yml
+

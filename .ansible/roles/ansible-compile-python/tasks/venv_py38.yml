@@ -1,0 +1,26 @@
+- name: "virtualenv for {{ py_data.version }} | Check if virtualenv is already installed"
+  become: true
+  stat: path="{{ venv_path }}"
+  register: already_installed
+  ignore_errors: True
+  when: should_install
+  #- debug: var=already_installed
+
+
+- name: " {{ py_data.version }} | Install virtualenv"
+  become: true
+  command: "{{ item }}"
+  args:
+    creates: "{{ venv_path }}"
+  with_items:
+    - "{{ py_data.bin }} -m venv {{ venv_path }}"
+  when: should_install and not already_installed.stat.exists
+
+- name: Recursively change ownership of a directory
+  become: true
+  file:
+    path: "{{ venv_path }}"
+    state: directory
+    recurse: yes
+    owner: www
+    group: www  

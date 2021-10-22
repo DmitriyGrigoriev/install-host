@@ -1,0 +1,5 @@
+---
+- name: Install SSH agent
+  hosts: local
+  roles:
+    - role: ansible-ssh-agent
